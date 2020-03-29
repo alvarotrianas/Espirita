@@ -16,31 +16,37 @@ class ESPIRITA_API AEspiritaCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AEspiritaCharacter();
+public:
 	//set if the camera can move with the player
 	UPROPERTY(EditAnywhere, Category = Camera)
-		bool isFixedCamera;
+		bool IsFixedCamera;
 	//set the camera angle
 	UPROPERTY(EditAnywhere, Category = Camera)
-		float cameraAngle;
+		float CameraAngle;
 	//set the camera distance to the player
 	UPROPERTY(EditAnywhere, Category = Camera)
-		float cameraLengthToPlayer;
+		float CameraLengthToPlayer;
 	//instance of camera shake
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float timeToCollet;
+		float TimeToCollet;
 	//*Count the times that a timer is called*//
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float timerCalls;
+		float TimerCalls;
 	UPROPERTY(EditAnywhere)
-		float blockDistanceFromThePlayer;
+		float BlockDistanceFromThePlayer;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<class ABlock> BlockToSpawn;
+	ABlock* CurrentBlock;
+
 	//Set posible can pic up something
-	bool onPause, canInteract;
+	bool OnPause, CanInteract;
 	//Set the current time por the pause init
-	float currTime;
+	float CurrTime;
 	//Set the object that implements the interect functions
-	class IInteroperable* interactObject;
+	class IInteroperable* InteractObject;
 	//*Game mode variable useful for all the world requirements*//
-	class AEspiritaGameModeBase* gameMode;
+	class AEspiritaGameModeBase* GameMode;
 	//* Returns CameraBoom subobject *//
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	//* Returns FollowCamera subobject *//
@@ -49,28 +55,10 @@ public:
 
 
 protected:
-	//* Called for forwards/backward input *//
-	void MoveForward(float Value);
-	//* Called for side to side input *//
-	void MoveRight(float Value);
-	//* APawn interface *//
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime);
 
 private:
-	//* Restart game*//
-	void RestartLevel();
-	//*Interact with some Item*//
-	void Interact();
-	//*Put a block in the map*//
-	void PutBlock();
-	//*Stop interact with some Item*//
-	void StopInteract();
-	//*Pick if can*//
-	void Pick();
-	//*check if the interact key is pressed *//
-	bool canPick;
 	//*Overlap function, called when the actor ovelap something*//
 	UFUNCTION()
 		void OnOverlap(AActor* me, AActor* other);
@@ -87,8 +75,8 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FollowCamera;
 
-	UPROPERTY(EditAnywhere)
-		TSubclassOf<class ABlock> blockToSpawn;
+public:
 
-	AActor* currentBlock;
+	void DoInteraction();
+
 };

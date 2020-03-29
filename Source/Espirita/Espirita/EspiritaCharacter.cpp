@@ -29,20 +29,19 @@
 AEspiritaCharacter::AEspiritaCharacter()
 {
 	//pause flag
-	onPause = true;
-	currTime = 0;
+	OnPause = true;
+	CurrTime = 0;
 	//PickUp flag
-	canInteract = false;
+	CanInteract = false;
 	//Set the camera debug variables
-	isFixedCamera = false;
-	cameraAngle = -70.0f;
-	cameraLengthToPlayer = 600.0f;
+	IsFixedCamera = true;
+	CameraAngle = -70.0f;
+	CameraLengthToPlayer = 600.0f;
 	//collec default time
-	timeToCollet = 2.0f;
-	canPick = false;
-	timerCalls = 0.0f;
+	TimeToCollet = 2.0f;
+	TimerCalls = 0.0f;
 	//block variables
-	blockDistanceFromThePlayer = 200.0f;
+	BlockDistanceFromThePlayer = 200.0f;
 
 	// Set size for player capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -61,10 +60,10 @@ AEspiritaCharacter::AEspiritaCharacter()
 	// Create a camera boom...
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->bAbsoluteRotation = true; // Don't want arm to rotate when character does
-	CameraBoom->TargetArmLength = cameraLengthToPlayer;
-	CameraBoom->RelativeRotation = FRotator(cameraAngle, 0.f, 0.f);
-	CameraBoom->bAbsoluteLocation = isFixedCamera; //Don't want arm to move, is fixed camera
+	CameraBoom->SetUsingAbsoluteRotation(true); // Don't want arm to rotate when character does
+	CameraBoom->TargetArmLength = CameraLengthToPlayer;
+	CameraBoom->SetRelativeRotation(FRotator(CameraAngle, 0.f, 0.f));
+	CameraBoom->SetUsingAbsoluteLocation(IsFixedCamera); //Don't want arm to move, is fixed camera
 	CameraBoom->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
 
 	// Create a camera...
@@ -76,20 +75,6 @@ AEspiritaCharacter::AEspiritaCharacter()
 //////////////////////////////////////////////////////////////////////////
 // Input
 
-void AEspiritaCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
-{
-	PlayerInputComponent->BindAxis("MoveForward", this, &AEspiritaCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &AEspiritaCharacter::MoveRight);
-
-	FInputActionBinding& toggle = InputComponent->BindAction("RestartLevel", IE_Pressed, this, &AEspiritaCharacter::RestartLevel);
-	toggle.bExecuteWhenPaused = true;
-	//PickUp the items
-	InputComponent->BindAction("PutBlock", IE_Pressed, this, &AEspiritaCharacter::PutBlock);
-
-	InputComponent->BindAction("PickUp", IE_Pressed, this, &AEspiritaCharacter::Interact);
-	InputComponent->BindAction("PickUp", IE_Released, this, &AEspiritaCharacter::StopInteract);
-
-}
 
 void AEspiritaCharacter::BeginPlay()
 {
@@ -99,65 +84,16 @@ void AEspiritaCharacter::BeginPlay()
 	OnActorBeginOverlap.AddDynamic(this, &AEspiritaCharacter::OnOverlap);
 	OnActorEndOverlap.AddDynamic(this, &AEspiritaCharacter::EndOverlap);
 	//Get world()
-	gameMode = GetWorld()->GetAuthGameMode<AEspiritaGameModeBase>();
+	GameMode = GetWorld()->GetAuthGameMode<AEspiritaGameModeBase>();
 	//set camera variables
-	CameraBoom->bAbsoluteLocation = isFixedCamera; //Don't want arm to move, is fixed camera
-	gameMode->angle = cameraAngle;
-	gameMode->distance = cameraLengthToPlayer;
+	CameraBoom->SetUsingAbsoluteLocation(IsFixedCamera); //Don't want arm to move, is fixed camera
+	GameMode->angle = CameraAngle;
+	GameMode->distance = CameraLengthToPlayer;
 }
 
 void AEspiritaCharacter::Tick(float deltaTime)
 {
 	Super::Tick(deltaTime);
-
-
-	if (canPick && canInteract)
-	{
-		timerCalls += deltaTime;
-		if (timerCalls >= timeToCollet)
-		{
-			Pick();
-			timerCalls = 0.0f;
-		}
-	}
-
-}
-
-void AEspiritaCharacter::MoveForward(float Value)
-{
-	if ((Controller != NULL) && (Value != 0.0f))
-	{
-		// find out which way is forward
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		// get forward vector
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		AddMovementInput(Direction, Value);
-	}
-}
-
-void AEspiritaCharacter::MoveRight(float Value)
-{
-	if ((Controller != NULL) && (Value != 0.0f))
-	{
-		// find out which way is right
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		// get right vector 
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		// add movement in that direction
-		AddMovementInput(Direction, Value);
-	}
-}
-
-void AEspiritaCharacter::RestartLevel()
-{
-	gameMode = GetWorld()->GetAuthGameMode<AEspiritaGameModeBase>();
-	if (gameMode->actualGameState != PLAYING) {
-		GetWorld()->ServerTravel(gameMode->GetName());
-	}
 }
 
 void AEspiritaCharacter::OnOverlap(AActor* me, AActor* other)
@@ -165,8 +101,8 @@ void AEspiritaCharacter::OnOverlap(AActor* me, AActor* other)
 	IInteroperable* interacting = Cast<IInteroperable>(other);
 	if (interacting != nullptr)
 	{
-		canInteract = true;	
-		interactObject = interacting;
+		CanInteract = true;	
+		InteractObject = interacting;
 		interacting = nullptr;
 	}
 }
@@ -174,8 +110,8 @@ void AEspiritaCharacter::EndOverlap(AActor* me, AActor* other)
 {
 	if (Cast<IInteroperable>(other) != nullptr)
 	{
-		canInteract = false;
-		interactObject = nullptr;
+		CanInteract = false;
+		InteractObject = nullptr;
 	}
 }
 
@@ -183,61 +119,13 @@ void AEspiritaCharacter::OnHit(AActor* SelfActor, AActor* OtherActor, FVector No
 {
 	AStandardEnemy* overalpObject = Cast<AStandardEnemy>(OtherActor);
 	if (overalpObject != nullptr) {
-		gameMode = GetWorld()->GetAuthGameMode<AEspiritaGameModeBase>();
-		gameMode->actualGameState = LOSE;
+		GameMode = GetWorld()->GetAuthGameMode<AEspiritaGameModeBase>();
+		GameMode->actualGameState = LOSE;
 		UGameplayStatics::SetGamePaused(GetWorld(), true);
 	}
 }
-void AEspiritaCharacter::Interact()
+
+void AEspiritaCharacter::DoInteraction()
 {
-	canPick = true;
-	ADoor* someDoor = Cast<ADoor>(interactObject);
-
-
-	interactObject->DoPlayerInteraction();
-	
-	/*if (canInteract && (interactObject != nullptr && someDoor != nullptr))
-	{
-		interactObject->DoPlayerInteraction();
-	}
-	else if (canInteract && (interactObject != nullptr || someDoor == nullptr))
-	{
-		canPick = true;
-	}*/
-}
-
-void AEspiritaCharacter::PutBlock()
-{
-	if (blockToSpawn != nullptr)
-	{
-		const FRotator actorRotation = GetActorRotation();
-		const FVector  actorPosition = GetActorLocation();
-		const FVector  forwarVector = GetActorForwardVector() * blockDistanceFromThePlayer;
-		const FVector  blockPosition = actorPosition + forwarVector;
-
-		if (currentBlock == nullptr)
-		{
-			currentBlock = GetWorld()->SpawnActor<ABlock>(blockToSpawn, blockPosition, actorRotation);
-			return;
-		}
-		currentBlock->SetActorLocation(blockPosition);
-		currentBlock->SetActorRotation(actorRotation);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("NOT BLOCK"));
-	}
-}
-void AEspiritaCharacter::StopInteract()
-{
-	canPick = false;
-	timerCalls = 0.0f;
-}
-
-void AEspiritaCharacter::Pick()
-{
-	if (canPick && canInteract && interactObject != nullptr)
-	{
-		interactObject->DoPlayerInteraction();
-	}
+	InteractObject->DoPlayerInteraction();
 }

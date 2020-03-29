@@ -26,4 +26,8 @@ public:
 
 	UBoxComponent* BoxComponent;
 
+public:
+	UFUNCTION(BlueprintImplementableEvent)
+		void SpawnBlock();
+
 };

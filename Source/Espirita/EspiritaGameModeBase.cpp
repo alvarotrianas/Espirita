@@ -6,6 +6,10 @@
 #include "GameFramework/HUD.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
+#include "Espirita/Core/EspiritaPlayerController.h"
+ 
+
+
 #define PLAYING 0
 #define WIN 1
 #define LOSE -1
@@ -24,6 +28,8 @@ AEspiritaGameModeBase::AEspiritaGameModeBase()
 	keys = 0;
 
 	actualGameState = PLAYING;
+	
+	PlayerControllerClass = AEspiritaPlayerController::StaticClass();
 	// set default pawn class to our Blueprinted character
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/Blueprints/Espirita/BP_Espirita"));
 	if (PlayerPawnBPClass.Class != NULL)
