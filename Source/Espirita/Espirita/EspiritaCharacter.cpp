@@ -17,6 +17,7 @@
 #include "Espirita/EspiritaGameModeBase.h"
 #include "Espirita/Enemies/StandardEnemy.h"
 #include "Espirita/EscenaryObjects/Doors/Door.h"
+#include "Espirita/EspiritaInterfaces/Interoperable.h"
 
 
 #define TIMERCALLING 0.1f
@@ -41,7 +42,7 @@ AEspiritaCharacter::AEspiritaCharacter()
 	TimeToCollet = 2.0f;
 	TimerCalls = 0.0f;
 	//block variables
-	BlockDistanceFromThePlayer = 200.0f;
+	BlockDistanceFromThePlayer = 250.0f;
 
 	// Set size for player capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -127,5 +128,10 @@ void AEspiritaCharacter::OnHit(AActor* SelfActor, AActor* OtherActor, FVector No
 
 void AEspiritaCharacter::DoInteraction()
 {
-	InteractObject->DoPlayerInteraction();
+	//if(IsValid(InteractObject))
+	if (InteractObject) 
+	{
+		InteractObject->DoPlayerInteraction();
+
+	}	
 }

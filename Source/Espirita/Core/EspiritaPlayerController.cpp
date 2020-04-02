@@ -21,6 +21,7 @@ void AEspiritaPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("MoveRight", this, &AEspiritaPlayerController::MoveRight);
 	
 	InputComponent->BindAction("PutBlock", IE_Pressed, this, &AEspiritaPlayerController::PutBlock);
+	//InputComponent->BindAction("PutBlock", IE_Released, this, &AEspiritaPlayerController::PutBlock);
 
 	InputComponent->BindAction("PickUp", IE_Pressed, this, &AEspiritaPlayerController::Interact);
 	InputComponent->BindAction("PickUp", IE_Released, this, &AEspiritaPlayerController::StopInteract);
@@ -68,16 +69,6 @@ void AEspiritaPlayerController::RestarEspiritatLevel()
 {
 }
 */
-void AEspiritaPlayerController::Interact()
-{
-	//canPick = true;
-	if (IsValid(Player))
-	{
-		Player->DoInteraction();
-		//Player->InteractObject->DoPlayerInteraction();
-	}
-}
-
 void AEspiritaPlayerController::PutBlock()
 {
 	if (IsValid(Player) && IsValid(Player->BlockToSpawn))
@@ -86,6 +77,8 @@ void AEspiritaPlayerController::PutBlock()
 		const FVector  actorPosition = Player->GetActorLocation();
 		const FVector  forwarVector = Player->GetActorForwardVector() * Player->BlockDistanceFromThePlayer;
 		const FVector  blockPosition = actorPosition + forwarVector;
+		
+		Player->StopInputWhile(2.3);
 
 		if (Player->CurrentBlock == nullptr)
 		{
@@ -96,14 +89,31 @@ void AEspiritaPlayerController::PutBlock()
 		Player->CurrentBlock->SetActorLocation(blockPosition);
 		Player->CurrentBlock->SetActorRotation(actorRotation);
 		Player->CurrentBlock->SpawnBlock();
+		//Player->bIsCasting = false;
+		
+		
 	}
 }
 
 void AEspiritaPlayerController::StopInteract()
 {
+	//UE_LOG(LogTemp, Warning, TEXT("Stop Interact"));
 	/*
 	canPick = false;
 	timerCalls = 0.0f;
 	*/
+	if (IsValid(Player)) Player->bIsInteracting = false;
 	
+}
+
+void AEspiritaPlayerController::Interact()
+{
+	//UE_LOG(LogTemp, Warning, TEXT("Interact"));
+	//canPick = true;
+	if (IsValid(Player))
+	{
+		Player->DoInteraction();
+		Player->bIsInteracting = true;
+		//Player->InteractObject->DoPlayerInteraction();
+	}
 }

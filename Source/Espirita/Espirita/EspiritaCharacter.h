@@ -32,8 +32,18 @@ public:
 	//*Count the times that a timer is called*//
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float TimerCalls;
+	UPROPERTY(BlueprintReadWrite, Category = "Animation")
+		bool bIsCasting;
+	UPROPERTY(BlueprintReadWrite, Category = "Animation")
+		bool bIsInteracting;
 	UPROPERTY(EditAnywhere)
 		float BlockDistanceFromThePlayer;
+
+
+	void DoInteraction();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void StopInputWhile(float TimeToStop);
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class ABlock> BlockToSpawn;
@@ -75,8 +85,6 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FollowCamera;
 
-public:
-
-	void DoInteraction();
+	
 
 };

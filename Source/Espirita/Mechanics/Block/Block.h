@@ -21,7 +21,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category = "Block")
 		UStaticMeshComponent* normalBlock;
 
 	UBoxComponent* BoxComponent;

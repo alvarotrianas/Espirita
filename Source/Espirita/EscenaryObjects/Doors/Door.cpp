@@ -20,7 +20,7 @@ void ADoor::BeginPlay()
 
 void ADoor::DoPlayerInteraction()
 {
-	bIsActive = true;
+	bIsActive = !bIsActive;
 	//UE_LOG(LogTemp, Warning, TEXT("Opening A Door \n"));
 }
 
