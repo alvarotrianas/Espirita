@@ -32,8 +32,8 @@ protected:
 		void PutBlock();
 	UFUNCTION()
 		void StopInteract();
-	/*	UFUNCTION()
+	UFUNCTION()
 	void RestarEspiritatLevel();
 
-*/
+
 };

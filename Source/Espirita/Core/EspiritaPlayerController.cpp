@@ -2,8 +2,13 @@
 
 
 #include "EspiritaPlayerController.h"
-#include"Espirita/Espirita/EspiritaCharacter.h"
+#include "Espirita/Espirita/EspiritaCharacter.h"
+#include "Espirita/EspiritaGameModeBase.h"
+#include "Kismet/GameplayStatics.h"
 
+#define PLAYING 0
+#define WIN 1
+#define LOSE -1
 
 
 
@@ -27,11 +32,10 @@ void AEspiritaPlayerController::SetupInputComponent()
 	InputComponent->BindAction("PickUp", IE_Released, this, &AEspiritaPlayerController::StopInteract);
 
 	
-	/*
+	
 	FInputActionBinding& toggle = InputComponent->BindAction("RestartLevel", IE_Pressed, this, &AEspiritaPlayerController::RestarEspiritatLevel);
 	toggle.bExecuteWhenPaused = true;
-	//PickUp the items
-	*/
+	
 
 }
 
@@ -64,11 +68,17 @@ void AEspiritaPlayerController::MoveRight(float Value)
 		Player->AddMovementInput(Direction, Value);
 	}
 }
-/*
+
 void AEspiritaPlayerController::RestarEspiritatLevel()
 {
+	AEspiritaGameModeBase * gameMode = GetWorld()->GetAuthGameMode<AEspiritaGameModeBase>();
+	if (gameMode->actualGameState != PLAYING) 
+	{
+		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), true);
+		//GetWorld()->ServerTravel(gameMode->GetName());
+	}
 }
-*/
+
 void AEspiritaPlayerController::PutBlock()
 {
 	if (IsValid(Player) && IsValid(Player->BlockToSpawn))
