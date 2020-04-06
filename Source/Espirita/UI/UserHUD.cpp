@@ -68,7 +68,6 @@ void UUserHUD::UpdatePoints()
 void UUserHUD::NativeConstruct()
 {
 	Super::NativeConstruct();
-	UE_LOG(LogTemp, Warning, TEXT("HOLA \n"));
 	//Get the game mode an verify if exist
 	AGameModeBase* mode = GetWorld()->GetAuthGameMode();
 	if (mode != nullptr) {
