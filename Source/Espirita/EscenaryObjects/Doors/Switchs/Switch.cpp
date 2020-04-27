@@ -16,18 +16,26 @@ ASwitch::ASwitch()
 void ASwitch::BeginPlay()
 {
 	Super::BeginPlay();
-	if (myDoor != nullptr) {
+	OnActorBeginOverlap.AddDynamic(this, &ASwitch::OnOverlap);
+
+	if (myDoor != nullptr) 
+	{
 		myDoor->setnumSwitch(OFF);
 	}
 	else
 	{
 		this->Destroy();
 	}
+	
 }
 
 void ASwitch::OnOverlap(AActor* me, AActor* other)
 {
-	if (myDoor != nullptr) {
+	UE_LOG(LogTemp, Warning, TEXT("Overlap"));
+
+	if (myDoor != nullptr) 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Some warning message"));
 		myDoor->setActiveSwitch(ON);
 	}
 }

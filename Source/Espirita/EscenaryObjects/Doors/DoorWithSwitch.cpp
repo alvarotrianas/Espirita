@@ -28,4 +28,5 @@ void ADoorWithSwitch::setActiveSwitch(int arg)
 //do nothing at this moment
 void ADoorWithSwitch::DoPlayerInteraction()
 {
+	UE_LOG(LogTemp, Warning, TEXT("I have to react %d"), numSwitch);
 }
