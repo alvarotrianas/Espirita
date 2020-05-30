@@ -34,6 +34,4 @@ protected:
 		void StopInteract();
 	UFUNCTION()
 	void RestarEspiritatLevel();
-
-
 };
