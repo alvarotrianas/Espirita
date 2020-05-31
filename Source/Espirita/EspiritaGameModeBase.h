@@ -14,7 +14,6 @@ class ESPIRITA_API AEspiritaGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
-
 public:
 	AEspiritaGameModeBase();
 	//*current camera angle*//
@@ -46,5 +45,4 @@ private:
 	float score;
 	//*the keys in level every key can open every door*//
 	int keys;
-	
 };

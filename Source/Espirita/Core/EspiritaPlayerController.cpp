@@ -35,8 +35,6 @@ void AEspiritaPlayerController::SetupInputComponent()
 	
 	FInputActionBinding& toggle = InputComponent->BindAction("RestartLevel", IE_Pressed, this, &AEspiritaPlayerController::RestarEspiritatLevel);
 	toggle.bExecuteWhenPaused = true;
-	
-
 }
 
 

@@ -18,7 +18,6 @@
 #include "Espirita/EscenaryObjects/Doors/Door.h"
 #include "Espirita/EspiritaInterfaces/Interoperable.h"
 
-
 #define TIMERCALLING 0.1f
 #define PLAYING 0
 #define WIN 1

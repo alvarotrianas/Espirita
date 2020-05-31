@@ -32,10 +32,9 @@ AEspiritaGameModeBase::AEspiritaGameModeBase()
 	PlayerControllerClass = AEspiritaPlayerController::StaticClass();
 	// set default pawn class to our Blueprinted character
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/Blueprints/Espirita/BP_Espirita"));
+
 	if (PlayerPawnBPClass.Class != NULL)
-	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
-	}
 }
 
 void AEspiritaGameModeBase::BeginPlay()
