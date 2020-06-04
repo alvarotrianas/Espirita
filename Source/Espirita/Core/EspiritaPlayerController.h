@@ -13,7 +13,6 @@ UCLASS()
 class ESPIRITA_API AEspiritaPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-
 protected:
     virtual void BeginPlay() override;
     virtual void SetupInputComponent() override;
@@ -34,6 +33,4 @@ protected:
 		void StopInteract();
 	UFUNCTION()
 	void RestarEspiritatLevel();
-
-
 };

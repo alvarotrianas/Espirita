@@ -39,14 +39,17 @@ public:
 	UPROPERTY(EditAnywhere)
 		float BlockDistanceFromThePlayer;
 
-
 	void DoInteraction();
 
 	UFUNCTION(BlueprintImplementableEvent)
-		void StopInputWhile(float TimeToStop);
+		void InvokeBlock();
+
+	UFUNCTION(BlueprintCallable)
+		void PutBlock();
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class ABlock> BlockToSpawn;
+
 	ABlock* CurrentBlock;
 
 	//Set posible can pic up something
@@ -61,9 +64,6 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	//* Returns FollowCamera subobject *//
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-
-
-
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime);
@@ -84,7 +84,4 @@ private:
 	//* Follow camera *//
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FollowCamera;
-
-	
-
 };

@@ -35,8 +35,6 @@ void AEspiritaPlayerController::SetupInputComponent()
 	
 	FInputActionBinding& toggle = InputComponent->BindAction("RestartLevel", IE_Pressed, this, &AEspiritaPlayerController::RestarEspiritatLevel);
 	toggle.bExecuteWhenPaused = true;
-	
-
 }
 
 
@@ -81,28 +79,8 @@ void AEspiritaPlayerController::RestarEspiritatLevel()
 
 void AEspiritaPlayerController::PutBlock()
 {
-	if (IsValid(Player) && IsValid(Player->BlockToSpawn))
-	{
-		const FRotator actorRotation = Player->GetActorRotation();
-		const FVector  actorPosition = Player->GetActorLocation();
-		const FVector  forwarVector = Player->GetActorForwardVector() * Player->BlockDistanceFromThePlayer;
-		const FVector  blockPosition = actorPosition + forwarVector;
-		
-		Player->StopInputWhile(2.3);
-
-		if (Player->CurrentBlock == nullptr)
-		{
-			Player->CurrentBlock = GetWorld()->SpawnActor<ABlock>(Player->BlockToSpawn, blockPosition, actorRotation);
-			Player->CurrentBlock->SpawnBlock();
-			return;
-		}
-		Player->CurrentBlock->SetActorLocation(blockPosition);
-		Player->CurrentBlock->SetActorRotation(actorRotation);
-		Player->CurrentBlock->SpawnBlock();
-		//Player->bIsCasting = false;
-		
-		
-	}
+	if (IsValid(Player) && !Player->bIsCasting)
+		Player->InvokeBlock();
 }
 
 void AEspiritaPlayerController::StopInteract()

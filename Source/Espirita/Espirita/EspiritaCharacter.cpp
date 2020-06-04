@@ -18,7 +18,6 @@
 #include "Espirita/EscenaryObjects/Doors/Door.h"
 #include "Espirita/EspiritaInterfaces/Interoperable.h"
 
-
 #define TIMERCALLING 0.1f
 #define PLAYING 0
 #define WIN 1
@@ -127,10 +126,28 @@ void AEspiritaCharacter::OnHit(AActor* SelfActor, AActor* OtherActor, FVector No
 
 void AEspiritaCharacter::DoInteraction()
 {
-	//if(IsValid(InteractObject))
 	if (InteractObject) 
-	{
 		InteractObject->DoPlayerInteraction();
+}
 
-	}	
+void AEspiritaCharacter::PutBlock()
+{
+	if (IsValid(BlockToSpawn))
+	{
+		const FRotator actorRotation = GetActorRotation();
+		const FVector  actorPosition = GetActorLocation();
+		const FVector  forwarVector = GetActorForwardVector() * BlockDistanceFromThePlayer;
+		const FVector  blockPosition = actorPosition + forwarVector;
+
+		if (CurrentBlock == nullptr)
+		{
+			CurrentBlock = GetWorld()->SpawnActor<ABlock>(BlockToSpawn, blockPosition, actorRotation);
+			CurrentBlock->SpawnBlock();
+			return;
+		}
+
+		CurrentBlock->SetActorLocation(blockPosition);
+		CurrentBlock->SetActorRotation(actorRotation);
+		CurrentBlock->SpawnBlock();
+	}
 }
