@@ -47,6 +47,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void PutBlock();
 
+	UFUNCTION(BlueprintCallable)
+		void EndGame();
+
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class ABlock> BlockToSpawn;
 
@@ -75,9 +78,6 @@ private:
 	//*EndOverlap function, called when the actor end ovelaping something*//
 	UFUNCTION()
 		void EndOverlap(AActor* me, AActor* other);
-	//*OnHit function, called when the actor hit something*//
-	UFUNCTION()
-		void OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
 	//* Camera boom positioning the camera behind the character *//
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* CameraBoom;

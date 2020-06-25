@@ -79,7 +79,6 @@ void AEspiritaCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	//Collision functions
-	OnActorHit.AddDynamic(this, &AEspiritaCharacter::OnHit);
 	OnActorBeginOverlap.AddDynamic(this, &AEspiritaCharacter::OnOverlap);
 	OnActorEndOverlap.AddDynamic(this, &AEspiritaCharacter::EndOverlap);
 	//Get world()
@@ -114,20 +113,17 @@ void AEspiritaCharacter::EndOverlap(AActor* me, AActor* other)
 	}
 }
 
-void AEspiritaCharacter::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
-{
-	AStandardEnemy* overalpObject = Cast<AStandardEnemy>(OtherActor);
-	if (overalpObject != nullptr) {
-		GameMode = GetWorld()->GetAuthGameMode<AEspiritaGameModeBase>();
-		GameMode->actualGameState = LOSE;
-		UGameplayStatics::SetGamePaused(GetWorld(), true);
-	}
-}
-
 void AEspiritaCharacter::DoInteraction()
 {
 	if (InteractObject) 
 		InteractObject->DoPlayerInteraction();
+}
+
+void AEspiritaCharacter::EndGame()
+{
+	GameMode = GetWorld()->GetAuthGameMode<AEspiritaGameModeBase>();
+	GameMode->actualGameState = LOSE;
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
 }
 
 void AEspiritaCharacter::PutBlock()
