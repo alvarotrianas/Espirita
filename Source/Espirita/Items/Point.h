@@ -11,21 +11,15 @@ UCLASS()
 class ESPIRITA_API APoint : public AActor, public IInteroperable
 {
 	GENERATED_BODY()
-
 public:
-	//* Sets default values for this actor's properties *//
 	APoint();
-	//* Set the value of the point *//
+
 	UPROPERTY(EditAnywhere)
 		float points;
-
 protected:
-	//* Called when the game starts or when spawned *//
 	virtual void BeginPlay() override;
-
 private:
 	class AEspiritaGameModeBase* gameMode;
-	//*Tell game mode a point spawned *//
 	void SpawnedPoint();
 	void DoPlayerInteraction() override;
 };

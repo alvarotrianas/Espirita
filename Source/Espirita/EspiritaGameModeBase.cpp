@@ -7,8 +7,6 @@
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "Espirita/Core/EspiritaPlayerController.h"
- 
-
 
 #define PLAYING 0
 #define WIN 1
@@ -17,9 +15,6 @@
 
 AEspiritaGameModeBase::AEspiritaGameModeBase()
 {
-	//set tick enble
-	//PrimaryActorTick.bCanEverTick = true;
-
 	angle = 0;
 	distance = 0;
 
@@ -28,9 +23,8 @@ AEspiritaGameModeBase::AEspiritaGameModeBase()
 	keys = 0;
 
 	actualGameState = PLAYING;
-	
 	PlayerControllerClass = AEspiritaPlayerController::StaticClass();
-	// set default pawn class to our Blueprinted character
+
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/Blueprints/Espirita/BP_Espirita"));
 
 	if (PlayerPawnBPClass.Class != NULL)
@@ -41,11 +35,6 @@ void AEspiritaGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
 }
-/* tick function
-void AMyProjectGameMode::Tick(float DeltaTime)
-{
-
-}*/
 
 void AEspiritaGameModeBase::UpdateScore(float points) {
 	score += points;

@@ -2,13 +2,11 @@
 
 #pragma once
 
+
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "EspiritaPlayerController.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class ESPIRITA_API AEspiritaPlayerController : public APlayerController
 {
@@ -16,15 +14,14 @@ class ESPIRITA_API AEspiritaPlayerController : public APlayerController
 protected:
     virtual void BeginPlay() override;
     virtual void SetupInputComponent() override;
-
 private:
     class AEspiritaCharacter* Player = nullptr;
+	void SetUpInput();
 
-protected:
 	UFUNCTION()
-	void MoveForward(float Value);
+		void MoveForward(float Value);
 	UFUNCTION()
-	void MoveRight(float Value);
+		void MoveRight(float Value);
 	UFUNCTION()
 		void Interact();
 	UFUNCTION()
@@ -32,5 +29,9 @@ protected:
 	UFUNCTION()
 		void StopInteract();
 	UFUNCTION()
-	void RestarEspiritatLevel();
+		void TryRestartLevel();
+	UFUNCTION()
+		void StartRun();
+	UFUNCTION()
+		void StopRun();
 };
