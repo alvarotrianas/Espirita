@@ -27,8 +27,8 @@ AEspiritaCharacter::AEspiritaCharacter()
 	IsRunning = false;
 	IsFixedCamera = true;
 	RunSpeedMultiplier = 2.0F;
-	CameraAngle = -70.0f;
-	CameraLengthToPlayer = 600.0f;
+	CameraAngle = -90.0f;
+	CameraLengthToPlayer = 1000.0f;
 	BlockDistanceFromThePlayer = 250.0f;
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 	bUseControllerRotationPitch = false;
@@ -50,6 +50,7 @@ AEspiritaCharacter::AEspiritaCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
+	
 }
 
 void AEspiritaCharacter::BeginPlay()
@@ -61,10 +62,11 @@ void AEspiritaCharacter::BeginPlay()
 
 	GameMode = GetWorld()->GetAuthGameMode<AEspiritaGameModeBase>();
 
+	/*
 	CameraBoom->SetUsingAbsoluteLocation(IsFixedCamera);
 	GameMode->angle = CameraAngle;
 	GameMode->distance = CameraLengthToPlayer;
-
+	*/
 	BaseMovementSpeed = Movement->MaxWalkSpeed;
 }
 
