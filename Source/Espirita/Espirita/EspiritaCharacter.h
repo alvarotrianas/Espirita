@@ -24,12 +24,18 @@ public:
 		float CameraLengthToPlayer;
 	UPROPERTY(BlueprintReadWrite, Category = "Animation")
 		bool bIsCasting;
+	UPROPERTY(BlueprintReadOnly, Category = "Animation")
+		bool bIsRemoving;
 	UPROPERTY(BlueprintReadWrite, Category = "Animation")
 		bool bIsInteracting;
 	UPROPERTY(BlueprintReadOnly, Category = "Character Movement: Running")
 		bool IsRunning;
 	UPROPERTY(EditAnywhere)
 		float BlockDistanceFromThePlayer;
+	UPROPERTY(EditAnywhere, Category = "Souls")
+		float RunSoulCost;
+	UPROPERTY(EditAnywhere, Category = "Souls")
+		float SummonSoulCost;
 	UPROPERTY(Category = "Character Movement: Running", EditAnywhere, BlueprintReadWrite, meta = (ClampMin = "0", UIMin = "0"))
 		float RunSpeedMultiplier;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -38,7 +44,13 @@ public:
 		class UCameraComponent* FollowCamera;
 
 	UFUNCTION(BlueprintImplementableEvent)
-		void InvokeBlock();
+		void SummonBlock();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void RemoveBlock(FVector blockPosition);
+
+	UFUNCTION(BlueprintCallable)
+		void BlockRemoveEnded();
 
 	UFUNCTION(BlueprintCallable)
 		void PutBlock();
@@ -50,6 +62,7 @@ public:
 		TSubclassOf<class ABlock> BlockToSpawn;
 
 	void DoInteraction();
+	void TrySummonBlock();
 	void TryStartRun();
 	void TryStopRun();
 
@@ -57,7 +70,6 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 protected:
 	virtual void BeginPlay() override;
-	virtual void Tick(float deltaTime);
 private:
 	ABlock* CurrentBlock;
 	UCharacterMovementComponent* Movement;
@@ -70,4 +82,6 @@ private:
 		void OnOverlap(AActor* me, AActor* other);
 	UFUNCTION()
 		void EndOverlap(AActor* me, AActor* other);
+	UFUNCTION()
+		void ValidateRun();
 };

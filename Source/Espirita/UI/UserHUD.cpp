@@ -6,7 +6,6 @@
 
 int lastGameMode = -1;
 int lastPoints = -1;
-int currentPoints = -1;
 
 void UUserHUD::NativeConstruct()
 {
@@ -18,8 +17,10 @@ void UUserHUD::NativeConstruct()
 	else
 		UE_LOG(LogTemp, Warning, TEXT("No game Mode \n"));
 
-	totalPoints = gameMode->GetPointsInLevel();
-	currentPoints = totalPoints - gameMode->GetPointsInLevel();
+	totalSouls = gameMode->GetRegisteredSoulsCount();
+	currentSouls = totalSouls - gameMode->GetCurrentSoulsCount(); 
+	lastGameMode = -1;
+	lastPoints = -1;
 }
 
 void UUserHUD::NativeTick(const FGeometry& geometry, float InDeltaTime)
@@ -28,24 +29,26 @@ void UUserHUD::NativeTick(const FGeometry& geometry, float InDeltaTime)
 
 	ListenGameModeChanges();
 	ListenPointsChanges();
+	currentEnergy = gameMode->GetCurrentEnergy();
+	currentEnergyPct = gameMode->GetCurrentEnergy() / totalSouls;
 }
 
 void UUserHUD::ListenGameModeChanges(void)
 {
-	if (gameMode->actualGameState != lastGameMode)
+	if (gameMode->ActualGameState != lastGameMode)
 	{
-		GameModeUpdated(gameMode->actualGameState);
-		lastGameMode = gameMode->actualGameState;
+		GameModeUpdated(gameMode->ActualGameState);
+		lastGameMode = gameMode->ActualGameState;
 	}
 }
 
 void UUserHUD::ListenPointsChanges(void)
 {
-	currentPoints = totalPoints - gameMode->GetPointsInLevel();
+	currentSouls = gameMode->GetCurrentSoulsCount();
 
-	if (currentPoints != lastPoints)
+	if (currentSouls != lastPoints)
 	{
-		PointsUpdated(currentPoints);
-		lastPoints = currentPoints;
+		PointsUpdated(currentSouls);
+		lastPoints = currentSouls;
 	}
 }

@@ -58,16 +58,16 @@ void AEspiritaPlayerController::MoveRight(float Value)
 
 void AEspiritaPlayerController::TryRestartLevel()
 {
-	AEspiritaGameModeBase * gameMode = GetWorld()->GetAuthGameMode<AEspiritaGameModeBase>();
+	AEspiritaGameModeBase* gameMode = GetWorld()->GetAuthGameMode<AEspiritaGameModeBase>();
 
-	if (gameMode->actualGameState != PLAYING) 
+	if (gameMode->ActualGameState != PLAYING) 
 		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), true);
 }
 
 void AEspiritaPlayerController::PutBlock()
 {
 	if (IsValid(Player) && !Player->bIsCasting)
-		Player->InvokeBlock();
+		Player->TrySummonBlock();
 }
 
 void AEspiritaPlayerController::StopInteract()

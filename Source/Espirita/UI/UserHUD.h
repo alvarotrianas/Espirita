@@ -16,7 +16,13 @@ public:
 	void NativeTick(const FGeometry& geometry, float InDeltaTime) override;
 
 	UPROPERTY(BlueprintReadOnly)
-		int totalPoints;
+		int currentSouls;
+	UPROPERTY(BlueprintReadOnly)
+		int totalSouls;
+	UPROPERTY(BlueprintReadOnly)
+		float currentEnergy;
+	UPROPERTY(BlueprintReadOnly)
+		float currentEnergyPct;
 	UFUNCTION(BlueprintImplementableEvent)
 		void GameModeUpdated(int state);
 	UFUNCTION(BlueprintImplementableEvent)

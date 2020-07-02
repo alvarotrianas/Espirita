@@ -16,10 +16,11 @@
 #include "Espirita/EscenaryObjects/Doors/Door.h"
 #include "Espirita/EspiritaInterfaces/Interoperable.h"
 
-#define TIMERCALLING 0.1f
 #define PLAYING 0
 #define WIN 1
 #define LOSE -1
+
+FTimerHandle RunValidationTimerHandle;
 
 AEspiritaCharacter::AEspiritaCharacter()
 {
@@ -50,7 +51,9 @@ AEspiritaCharacter::AEspiritaCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
-	
+
+	RunSoulCost = 0.1F;
+	SummonSoulCost = 1.0F;
 }
 
 void AEspiritaCharacter::BeginPlay()
@@ -62,22 +65,19 @@ void AEspiritaCharacter::BeginPlay()
 
 	GameMode = GetWorld()->GetAuthGameMode<AEspiritaGameModeBase>();
 
-	/*
-	CameraBoom->SetUsingAbsoluteLocation(IsFixedCamera);
-	GameMode->angle = CameraAngle;
-	GameMode->distance = CameraLengthToPlayer;
-	*/
 	BaseMovementSpeed = Movement->MaxWalkSpeed;
+	GetWorld()->GetTimerManager().SetTimer(RunValidationTimerHandle, this, &AEspiritaCharacter::ValidateRun, 0.25F, true, 0.0f);
 }
 
-void AEspiritaCharacter::Tick(float deltaTime)
+void AEspiritaCharacter::ValidateRun()
 {
-	Super::Tick(deltaTime);
-
 	if (IsRunning)
 		Movement->MaxWalkSpeed = (BaseMovementSpeed * RunSpeedMultiplier);
 	else
 		Movement->MaxWalkSpeed = BaseMovementSpeed;
+
+	if (IsRunning && !GameMode->TrySpendEnergy(RunSoulCost))
+		TryStopRun();
 }
 
 void AEspiritaCharacter::OnOverlap(AActor* me, AActor* other)
@@ -109,14 +109,34 @@ void AEspiritaCharacter::DoInteraction()
 
 void AEspiritaCharacter::EndGame()
 {
-	//GameMode = GetWorld()->GetAuthGameMode<AEspiritaGameModeBase>();
-	GameMode->actualGameState = LOSE;
+	GameMode->ActualGameState = LOSE;
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
+}
+
+void AEspiritaCharacter::TrySummonBlock()
+{
+	if (!bIsRemoving && !bIsCasting)
+	{
+		if (CurrentBlock != nullptr)
+		{
+			bIsRemoving = true;
+			CurrentBlock->RemoveBlock();
+			RemoveBlock(CurrentBlock->GetActorLocation());
+			CurrentBlock = nullptr;
+		}
+		else if (GameMode->TrySpendEnergy(SummonSoulCost))
+			SummonBlock();
+	}
+}
+
+void AEspiritaCharacter::BlockRemoveEnded()
+{
+	bIsRemoving = false;
 }
 
 void AEspiritaCharacter::PutBlock()
 {
-	if (IsValid(BlockToSpawn))
+	if (bIsCasting && IsValid(BlockToSpawn))
 	{
 		const FRotator actorRotation = GetActorRotation();
 		const FVector  actorPosition = GetActorLocation();
@@ -138,7 +158,8 @@ void AEspiritaCharacter::PutBlock()
 
 void AEspiritaCharacter::TryStartRun()
 {
-	IsRunning = true;
+	if (GameMode->GetCurrentEnergy() > RunSoulCost)
+		IsRunning = true;
 }
 
 void AEspiritaCharacter::TryStopRun()
