@@ -53,6 +53,9 @@ public:
 		void BlockRemoveEnded();
 
 	UFUNCTION(BlueprintCallable)
+		void ClearCurrentBlock();
+
+	UFUNCTION(BlueprintCallable)
 		void PutBlock();
 
 	UFUNCTION(BlueprintCallable)

@@ -80,12 +80,6 @@ void AEspiritaGameModeBase::PickupSoul(uint32 id)
 	pickedSouls.Add(id);
 	GetWorld()->GetTimerManager().ClearTimer(EnergyRecoverCooldown);
 	isEnergyInCoolDown = false;
-
-	if (pickedSouls.Num() == registeredSouls.Num())
-	{
-		ActualGameState = WIN;
-		UGameplayStatics::SetGamePaused(GetWorld(), true);
-	}
 }
 
 bool AEspiritaGameModeBase::TrySpendEnergy(float amount)
@@ -95,6 +89,18 @@ bool AEspiritaGameModeBase::TrySpendEnergy(float amount)
 		isEnergyInCoolDown = true;
 		GetWorld()->GetTimerManager().SetTimer(EnergyRecoverCooldown, this, &AEspiritaGameModeBase::EndEnergyCooldown, EnergyRecoveryCooldown, false, EnergyRecoveryCooldown);
 		currentEnergy -= amount;
+		return true;
+	}
+
+	return false;
+}
+
+bool AEspiritaGameModeBase::TryEndLevel()
+{
+	if (pickedSouls.Num() == registeredSouls.Num())
+	{
+		ActualGameState = WIN;
+		UGameplayStatics::SetGamePaused(GetWorld(), true);
 		return true;
 	}
 

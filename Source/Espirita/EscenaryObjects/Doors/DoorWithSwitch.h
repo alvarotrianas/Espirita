@@ -15,8 +15,13 @@ class ESPIRITA_API ADoorWithSwitch : public ADoor
 	GENERATED_BODY()
 private:
 	int numSwitch;
+protected:
+	void BeginPlay() override;
 public:
 	ADoorWithSwitch();
+
+	UPROPERTY(EditAnywhere)
+		bool StartActive;
 
 	void setnumSwitch(int arg);
 	void setActiveSwitch(int arg);

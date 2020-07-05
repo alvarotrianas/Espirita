@@ -43,6 +43,8 @@ public:
 	int GetRegisteredSoulsCount();
 	//Returns the count of picked souls in scene
 	int GetCurrentSoulsCount();
+	//Verify the picked souls and try end the current level
+	bool TryEndLevel();
 protected:
 	virtual void BeginPlay() override;
 private:

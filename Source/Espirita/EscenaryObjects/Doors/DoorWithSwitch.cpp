@@ -8,6 +8,14 @@ ADoorWithSwitch::ADoorWithSwitch()
 	numSwitch = 0;
 }
 
+void ADoorWithSwitch::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (StartActive)
+		setActiveSwitch(-1);
+}
+
 void ADoorWithSwitch::setnumSwitch(int arg)
 {
 	numSwitch += arg;

@@ -129,6 +129,13 @@ void AEspiritaCharacter::TrySummonBlock()
 	}
 }
 
+void AEspiritaCharacter::ClearCurrentBlock()
+{
+	bIsRemoving = false;
+	CurrentBlock->Destroy();
+	CurrentBlock = nullptr;
+}
+
 void AEspiritaCharacter::BlockRemoveEnded()
 {
 	bIsRemoving = false;
