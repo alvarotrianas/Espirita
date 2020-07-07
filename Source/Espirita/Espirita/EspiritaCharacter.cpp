@@ -132,7 +132,10 @@ void AEspiritaCharacter::TrySummonBlock()
 void AEspiritaCharacter::ClearCurrentBlock()
 {
 	bIsRemoving = false;
-	CurrentBlock->Destroy();
+
+	if (CurrentBlock != nullptr && IsValid(CurrentBlock) && !CurrentBlock->IsPendingKill())
+		CurrentBlock->Destroy();
+
 	CurrentBlock = nullptr;
 }
 

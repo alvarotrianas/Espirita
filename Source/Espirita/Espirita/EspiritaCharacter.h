@@ -64,6 +64,9 @@ public:
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class ABlock> BlockToSpawn;
 
+	UPROPERTY(BlueprintReadOnly)
+		bool CanInteract;
+
 	void DoInteraction();
 	void TrySummonBlock();
 	void TryStartRun();
@@ -78,7 +81,6 @@ private:
 	UCharacterMovementComponent* Movement;
 	class IInteroperable* InteractObject;
 	class AEspiritaGameModeBase* GameMode;
-	bool CanInteract;
 	float BaseMovementSpeed;
 
 	UFUNCTION()

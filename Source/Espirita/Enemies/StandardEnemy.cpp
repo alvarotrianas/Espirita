@@ -2,7 +2,6 @@
 #include "StandardEnemy.h"
 #include "Engine/TargetPoint.h"
 
-
 // Sets default values
 AStandardEnemy::AStandardEnemy()
 {
