@@ -49,6 +49,12 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void RemoveBlock(FVector blockPosition);
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void SummonBlockFailed();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void RunFailed();
+
 	UFUNCTION(BlueprintCallable)
 		void BlockRemoveEnded();
 

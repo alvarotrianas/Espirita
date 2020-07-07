@@ -22,4 +22,7 @@ public:
 		void SpawnBlock();
 	UFUNCTION(BlueprintImplementableEvent)
 		void RemoveBlock();
+
+	UPROPERTY(BlueprintReadOnly)
+		bool IsVisible;
 };

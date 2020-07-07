@@ -7,11 +7,6 @@
 #define OFF 1
 #define ON -1
 
-ASwitch::ASwitch()
-{
-
-}
-
 
 void ASwitch::BeginPlay()
 {

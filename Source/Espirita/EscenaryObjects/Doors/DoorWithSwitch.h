@@ -22,6 +22,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		bool StartActive;
+	UPROPERTY(Editanywhere)
+		bool isInverted;
 
 	void setnumSwitch(int arg);
 	void setActiveSwitch(int arg);

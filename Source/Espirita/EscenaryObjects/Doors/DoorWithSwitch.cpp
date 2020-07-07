@@ -24,14 +24,11 @@ void ADoorWithSwitch::setnumSwitch(int arg)
 void ADoorWithSwitch::setActiveSwitch(int arg)
 {
 	numSwitch += arg;
+
 	if (numSwitch <= 0) 
-	{
-		bIsActive = true;
-	}
+		bIsActive = isInverted ? false : true;
 	else
-	{
-		bIsActive = false;
-	}
+		bIsActive = isInverted ? true : false;
 }
 //do nothing at this moment
 void ADoorWithSwitch::DoPlayerInteraction()

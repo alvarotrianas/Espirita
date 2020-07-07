@@ -77,7 +77,10 @@ void AEspiritaCharacter::ValidateRun()
 		Movement->MaxWalkSpeed = BaseMovementSpeed;
 
 	if (IsRunning && !GameMode->TrySpendEnergy(RunSoulCost))
+	{
 		TryStopRun();
+		RunFailed();
+	}
 }
 
 void AEspiritaCharacter::OnOverlap(AActor* me, AActor* other)
@@ -117,30 +120,35 @@ void AEspiritaCharacter::TrySummonBlock()
 {
 	if (!bIsRemoving && !bIsCasting)
 	{
-		if (CurrentBlock != nullptr)
+		if (IsValid(CurrentBlock) && CurrentBlock->IsVisible)
 		{
 			bIsRemoving = true;
 			CurrentBlock->RemoveBlock();
 			RemoveBlock(CurrentBlock->GetActorLocation());
-			CurrentBlock = nullptr;
 		}
 		else if (GameMode->TrySpendEnergy(SummonSoulCost))
+		{
 			SummonBlock();
+		}
+		else 
+		{
+			SummonBlockFailed();
+		}
 	}
 }
 
 void AEspiritaCharacter::ClearCurrentBlock()
 {
 	bIsRemoving = false;
-
-	if (CurrentBlock != nullptr && IsValid(CurrentBlock) && !CurrentBlock->IsPendingKill())
-		CurrentBlock->Destroy();
-
-	CurrentBlock = nullptr;
+	CurrentBlock->IsVisible = false;
+	CurrentBlock->RemoveBlock();
+	CurrentBlock->SetActorLocation(FVector(10000, 10000, 10000));
 }
 
 void AEspiritaCharacter::BlockRemoveEnded()
 {
+	CurrentBlock->SetActorLocation(FVector(10000, 10000, 10000));
+	CurrentBlock->IsVisible = false;
 	bIsRemoving = false;
 }
 
@@ -157,9 +165,11 @@ void AEspiritaCharacter::PutBlock()
 		{
 			CurrentBlock = GetWorld()->SpawnActor<ABlock>(BlockToSpawn, blockPosition, actorRotation);
 			CurrentBlock->SpawnBlock();
+			CurrentBlock->IsVisible = true;
 			return;
 		}
 
+		CurrentBlock->IsVisible = true;
 		CurrentBlock->SetActorLocation(blockPosition);
 		CurrentBlock->SetActorRotation(actorRotation);
 		CurrentBlock->SpawnBlock();
@@ -170,6 +180,8 @@ void AEspiritaCharacter::TryStartRun()
 {
 	if (GameMode->GetCurrentEnergy() > RunSoulCost)
 		IsRunning = true;
+	else
+		RunFailed();
 }
 
 void AEspiritaCharacter::TryStopRun()
