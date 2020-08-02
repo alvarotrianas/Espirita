@@ -16,4 +16,7 @@ protected:
 private:
 	class AEspiritaGameModeBase* gameMode;
 	void DoPlayerInteraction() override;
+public:
+	UFUNCTION(BlueprintImplementableEvent)
+		void Picked();
 };

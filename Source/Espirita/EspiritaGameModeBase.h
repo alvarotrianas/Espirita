@@ -34,7 +34,8 @@ public:
 	//Register a soul to be collected during the match.
 	void RegisterSoul(APoint* soul);
 	//Validate if soul has been registered and returns if the pickup has succeded.
-	bool TryPickupSoul(APoint* soul);
+	UFUNCTION(BlueprintCallable)
+		bool TryPickupSoul(APoint* soul);
 	//Spends a certain amount of energy and returns if spend has succeeded
 	bool TrySpendEnergy(float amount);
 	//Returns the current energy

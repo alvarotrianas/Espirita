@@ -140,15 +140,23 @@ void AEspiritaCharacter::TrySummonBlock()
 void AEspiritaCharacter::ClearCurrentBlock()
 {
 	bIsRemoving = false;
-	CurrentBlock->IsVisible = false;
-	CurrentBlock->RemoveBlock();
-	CurrentBlock->SetActorLocation(FVector(10000, 10000, 10000));
+
+	if (CurrentBlock != nullptr)
+	{
+		CurrentBlock->IsVisible = false;
+		CurrentBlock->RemoveBlock();
+		CurrentBlock->SetActorLocation(FVector(10000, 10000, 10000));
+	}
 }
 
 void AEspiritaCharacter::BlockRemoveEnded()
 {
-	CurrentBlock->SetActorLocation(FVector(10000, 10000, 10000));
-	CurrentBlock->IsVisible = false;
+	if (CurrentBlock != nullptr)
+	{
+		CurrentBlock->SetActorLocation(FVector(10000, 10000, 10000));
+		CurrentBlock->IsVisible = false;
+	}
+
 	bIsRemoving = false;
 }
 

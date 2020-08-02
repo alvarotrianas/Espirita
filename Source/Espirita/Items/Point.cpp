@@ -14,5 +14,8 @@ void APoint::BeginPlay()
 void APoint::DoPlayerInteraction()
 {
 	if (gameMode->TryPickupSoul(this))
+	{
+		Picked();
 		this->Destroy();
+	}
 }
